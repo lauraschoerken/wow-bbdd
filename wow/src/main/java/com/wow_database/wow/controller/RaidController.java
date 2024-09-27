@@ -1,17 +1,57 @@
 package com.wow_database.wow.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wow_database.wow.model.entity.Raid;
+import com.wow_database.wow.service.RaidService;
+
 @RestController
-@RequestMapping("api/v1/")
+@RequestMapping("api/v1/raids")
 public class RaidController {
 
-	@GetMapping("raids")
-	public String getMethodName(@RequestParam String param) {
-		return new String();
+	@Autowired
+	private RaidService raidService;
+
+	@GetMapping
+	public String getRaidByName(@RequestParam String raidName) {
+		return "Fetching details for raid: " + raidName;
+	}
+
+	@GetMapping("/all")
+	public String getAllRaids() {
+		return "Fetching all raids from the database" + raidService.getAllRaids();
+	}
+
+	@GetMapping("/id")
+	public String getRaidsById(@RequestParam Long id) {
+		return "Fetching raid with id: " + id;
+	}
+
+	@GetMapping("/class/{className}")
+	public List<Raid> getRaidsByClass(@PathVariable String className) {
+		return raidService.getRaidsByClass(className);
+	}
+
+	@GetMapping("/difficulty/{difficulty}")
+	public List<Raid> getRaidsByDifficulty(@PathVariable String difficulty) {
+		return raidService.getRaidsByDifficulty(difficulty);
+	}
+
+	@GetMapping("/expansion/{expansion}")
+	public List<Raid> getRaidsByExpansion(@PathVariable String expansion) {
+		return raidService.getRaidsByExpansion(expansion);
+	}
+
+	@GetMapping("/hello")
+	public String sayHello() {
+		return "Hello, welcome to the WoW Raids API!";
 	}
 
 	public String hi() {

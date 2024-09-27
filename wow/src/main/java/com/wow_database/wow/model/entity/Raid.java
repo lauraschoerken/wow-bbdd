@@ -1,8 +1,6 @@
 package com.wow_database.wow.model.entity;
 
-import com.wow_database.wow.model.enums.RaidClass;
-import com.wow_database.wow.model.enums.RaidDifficulty;
-import com.wow_database.wow.model.enums.RaidExpansion;
+import com.wow_database.wow.model.enums.Expansion;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,17 +24,15 @@ public class Raid {
 	private String name;
 
 	@Enumerated(EnumType.STRING)
-	private RaidExpansion expansion;
+	private Expansion expansion;
 
 	private String mounts;
 
-	@Enumerated(EnumType.STRING)
-	private RaidClass classes;
+	private String classes;
 
 	private String transmogs;
 	private String achivements;
 
-	@Enumerated(EnumType.STRING)
-	private RaidDifficulty difficulties;
+	private String difficulty;
 
 }
