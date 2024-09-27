@@ -1,5 +1,5 @@
 package com.wow_database.wow.model.enums;
 
-public enum RaidDifficulty {
+public enum Difficulty {
     NORMAL, HEROIC, MYTHIC, LFR
 }

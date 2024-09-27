@@ -1,6 +1,6 @@
 package com.wow_database.wow.model.enums;
 
-public enum RaidExpansion {
+public enum Expansion {
 	CLASSIC, THE_BURNING_CRUSADE, LICH_KING, CATACLYSM, MISTS_OF_PANDARIA, WARLORDS_OF_DRAENOR, LEGION, BFA,
 	SHADOWLANDS, DRAGONFLIGHT
 }
