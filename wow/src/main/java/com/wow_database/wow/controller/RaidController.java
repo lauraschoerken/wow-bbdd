@@ -3,8 +3,11 @@ package com.wow_database.wow.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +32,8 @@ public class RaidController {
 		return "Fetching all raids from the database" + raidService.getAllRaids();
 	}
 
-	@GetMapping("/id")
-	public String getRaidsById(@RequestParam Long id) {
+	@GetMapping("/id/{id}")
+	public String getRaidsById(@PathVariable Long id) {
 		return "Fetching raid with id: " + id;
 	}
 
@@ -49,12 +52,15 @@ public class RaidController {
 		return raidService.getRaidsByExpansion(expansion);
 	}
 
+	@PostMapping
+	public ResponseEntity<String> newRaid(@RequestBody Raid raid) {
+		raidService.saveRaid(raid);
+		return ResponseEntity.ok("Raid creada con éxito con ID: " + raid.getId());
+	}
+
 	@GetMapping("/hello")
 	public String sayHello() {
 		return "Hello, welcome to the WoW Raids API!";
 	}
 
-	public String hi() {
-		return "hi";
-	}
 }
