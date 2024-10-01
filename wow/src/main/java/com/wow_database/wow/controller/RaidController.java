@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wow_database.wow.model.entity.Raid;
+import com.wow_database.wow.model.enums.checker.ClassNameChecker;
+import com.wow_database.wow.model.enums.checker.DifficultyChecker;
+import com.wow_database.wow.model.enums.checker.ExpansionChecker;
 import com.wow_database.wow.service.RaidService;
 
 @RestController
@@ -54,6 +57,10 @@ public class RaidController {
 
 	@PostMapping
 	public ResponseEntity<String> newRaid(@RequestBody Raid raid) {
+		raid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
+		raid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
+		raid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
+
 		raidService.saveRaid(raid);
 		return ResponseEntity.ok("Raid creada con éxito con ID: " + raid.getId());
 	}
