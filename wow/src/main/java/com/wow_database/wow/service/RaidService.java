@@ -1,6 +1,7 @@
 package com.wow_database.wow.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,11 @@ public class RaidService {
 
 	public List<Raid> getAllRaids() {
 		return raidRepository.findAll();
+	}
+
+	public Raid findRaidById(Long id) {
+		Optional<Raid> raidOptional = raidRepository.findById(id);
+		return raidOptional.orElse(null);
 	}
 
 	public List<Raid> getRaidsByDifficulty(String difficultyStr) {

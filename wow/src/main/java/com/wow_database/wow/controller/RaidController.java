@@ -3,10 +3,12 @@ package com.wow_database.wow.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,6 +65,22 @@ public class RaidController {
 
 		raidService.saveRaid(raid);
 		return ResponseEntity.ok("Raid creada con éxito con ID: " + raid.getId());
+	}
+
+	@PutMapping("id/update/{id}")
+	public ResponseEntity<String> updateRaid(@PathVariable Long id, @RequestBody Raid raid) {
+		Raid existingRaid = raidService.findRaidById(id);
+
+		if (existingRaid == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Raid con ID: " + id + " no encontrado.");
+		}
+		existingRaid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
+		existingRaid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
+		existingRaid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
+
+		raidService.saveRaid(existingRaid);
+
+		return ResponseEntity.ok("Raid con ID: " + id + " actualizada con éxito.");
 	}
 
 	@GetMapping("/hello")
