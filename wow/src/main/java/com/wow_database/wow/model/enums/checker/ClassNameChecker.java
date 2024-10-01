@@ -19,7 +19,7 @@ public class ClassNameChecker {
 				ClassName characterClass = ClassName.valueOf(className.toUpperCase().trim());
 				foundClasses.append(characterClass.name()).append(",");
 			} catch (IllegalArgumentException e) {
-				throw new IllegalArgumentException(className + " no es una clase válida.", e);
+				throw new IllegalArgumentException(className + " is a invalid class", e);
 			}
 		}
 		if (foundClasses.length() > 0) {

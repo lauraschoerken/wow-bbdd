@@ -15,7 +15,8 @@ public class ExpansionChecker {
 			Expansion expansion = Expansion.valueOf(input.toUpperCase().trim());
 			return expansion.name(); // Retornar el nombre de la expansión
 		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException(input + " no es una expansión válida.", e);
+
+			throw new IllegalArgumentException(input + " is a invalid expansion", e);
 		}
 	}
 

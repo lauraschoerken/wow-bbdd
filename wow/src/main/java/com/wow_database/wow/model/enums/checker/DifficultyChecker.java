@@ -20,7 +20,7 @@ public class DifficultyChecker {
 				Difficulty difficulty = Difficulty.valueOf(difficultyName.toUpperCase().trim());
 				foundDifficulties.append(difficulty.name()).append(",");
 			} catch (IllegalArgumentException e) {
-				throw new IllegalArgumentException(difficultyName + " no es una dificultad válida.", e);
+				throw new IllegalArgumentException(difficultyName + " is a invalid difficulty", e);
 			}
 		}
 		if (foundDifficulties.length() > 0) {
