@@ -31,6 +31,10 @@ public class RaidService {
 		return raidOptional.orElse(null);
 	}
 
+	public void deleteRaidById(Long id) {
+		raidRepository.deleteById(id);
+	}
+
 	public List<Raid> getRaidsByDifficulty(String difficultyStr) {
 		try {
 			Difficulty.valueOf(difficultyStr.toUpperCase());

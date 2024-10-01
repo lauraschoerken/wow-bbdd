@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +38,7 @@ public class RaidController {
 		return "Fetching all raids from the database" + raidService.getAllRaids();
 	}
 
-	@GetMapping("/id/{id}")
+	@GetMapping("{id}")
 	public String getRaidsById(@PathVariable Long id) {
 		return "Fetching raid with id: " + id;
 	}
@@ -67,20 +68,28 @@ public class RaidController {
 		return ResponseEntity.ok("Raid creada con éxito con ID: " + raid.getId());
 	}
 
-	@PutMapping("id/update/{id}")
+	@PutMapping("{id}")
 	public ResponseEntity<String> updateRaid(@PathVariable Long id, @RequestBody Raid raid) {
 		Raid existingRaid = raidService.findRaidById(id);
 
 		if (existingRaid == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Raid con ID: " + id + " no encontrado.");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Raid with ID: " + id + " not found.");
 		}
 		existingRaid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
 		existingRaid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
 		existingRaid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
-
 		raidService.saveRaid(existingRaid);
-
 		return ResponseEntity.ok("Raid con ID: " + id + " actualizada con éxito.");
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteRaid(@PathVariable Long id) {
+		Raid existingRaid = raidService.findRaidById(id);
+		if (existingRaid == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Raid with ID: " + id + " not found.");
+		}
+		raidService.deleteRaidById(id);
+		return ResponseEntity.ok("Raid with ID: " + id + " deleted");
 	}
 
 	@GetMapping("/hello")
