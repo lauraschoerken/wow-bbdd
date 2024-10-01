@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.wow_database.wow.model.entity.Raid;
-import com.wow_database.wow.model.enums.Expansion;
 
 public interface RaidRepository extends JpaRepository<Raid, Long> {
 
@@ -18,6 +17,6 @@ public interface RaidRepository extends JpaRepository<Raid, Long> {
 	List<Raid> findByClasses(@Param("className") String className);
 
 	@Query("SELECT r FROM Raid r WHERE r.expansion = :expansion")
-	List<Raid> findByExpansion(@Param("expansion") Expansion expansion);
+	List<Raid> findByExpansion(@Param("expansion") String expansion);
 
 }

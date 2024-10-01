@@ -1,10 +1,6 @@
 package com.wow_database.wow.model.entity;
 
-import com.wow_database.wow.model.enums.Expansion;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,8 +19,7 @@ public class Raid {
 
 	private String name;
 
-	@Enumerated(EnumType.STRING)
-	private Expansion expansion;
+	private String expansion;
 
 	private String mounts;
 

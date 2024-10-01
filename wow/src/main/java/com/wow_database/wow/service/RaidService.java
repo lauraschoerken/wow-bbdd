@@ -45,8 +45,8 @@ public class RaidService {
 
 	public List<Raid> getRaidsByExpansion(String expansionStr) {
 		try {
-			Expansion expansion = Expansion.valueOf(expansionStr.toUpperCase());
-			return raidRepository.findByExpansion(expansion);
+			Expansion.valueOf(expansionStr.toUpperCase());
+			return raidRepository.findByExpansion(expansionStr);
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Expansion no válida: " + expansionStr);
 		}
