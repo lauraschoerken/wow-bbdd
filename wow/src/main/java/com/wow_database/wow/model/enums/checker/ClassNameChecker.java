@@ -8,24 +8,8 @@ public class ClassNameChecker {
 	}
 
 	public static String checkClassName(String input) {
-		if (input == null || input.trim().isEmpty()) {
-			return null;
-		}
-		StringBuilder foundClasses = new StringBuilder();
-		String[] classesInString = input.split(",\\s*|\\s+");
+		return GeneralChecker.checkEnum(input, ClassName.class);
 
-		for (String className : classesInString) {
-			try {
-				ClassName characterClass = ClassName.valueOf(className.toUpperCase().trim());
-				foundClasses.append(characterClass.name()).append(",");
-			} catch (IllegalArgumentException e) {
-				throw new IllegalArgumentException(className + " is a invalid class", e);
-			}
-		}
-		if (foundClasses.length() > 0) {
-			foundClasses.setLength(foundClasses.length() - 1);
-		}
-		return foundClasses.toString();
 	}
 
 }
