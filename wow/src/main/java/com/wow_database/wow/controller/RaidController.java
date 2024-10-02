@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wow_database.wow.global.file.FileManager;
 import com.wow_database.wow.model.entity.Raid;
 import com.wow_database.wow.model.enums.checker.ClassNameChecker;
 import com.wow_database.wow.model.enums.checker.DifficultyChecker;
@@ -30,17 +31,19 @@ public class RaidController {
 
 	@GetMapping
 	public String getRaidByName(@RequestParam String raidName) {
-		return "Fetching details for raid: " + raidName;
+
+		// TODO
+		return "" + raidName;
 	}
 
 	@GetMapping("/all")
-	public String getAllRaids() {
-		return "Fetching all raids from the database" + raidService.getAllRaids();
+	public List<Raid> getAllRaids() {
+		return raidService.getAllRaids();
 	}
 
 	@GetMapping("{id}")
-	public String getRaidsById(@PathVariable Long id) {
-		return "Fetching raid with id: " + id;
+	public Raid getRaidsById(@PathVariable Long id) {
+		return raidService.getRaidById(id);
 	}
 
 	@GetMapping("/class/{className}")
@@ -59,42 +62,46 @@ public class RaidController {
 	}
 
 	@PostMapping
-	public ResponseEntity<String> newRaid(@RequestBody Raid raid) {
+	public ResponseEntity<Raid> newRaid(@RequestBody Raid raid) {
 		raid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
 		raid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
 		raid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
 
 		raidService.saveRaid(raid);
-		return ResponseEntity.ok("Raid creada con éxito con ID: " + raid.getId());
+		return ResponseEntity.ok(raid);
 	}
 
 	@PutMapping("{id}")
 	public ResponseEntity<String> updateRaid(@PathVariable Long id, @RequestBody Raid raid) {
-		Raid existingRaid = raidService.findRaidById(id);
-
-		if (existingRaid == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Raid with ID: " + id + " not found.");
+		ResponseEntity<String> verificationResponse = verifyRaidExists(id);
+		if (verificationResponse != null) {
+			return verificationResponse;
 		}
+		Raid existingRaid = raidService.getRaidById(id);
 		existingRaid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
 		existingRaid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
 		existingRaid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
 		raidService.saveRaid(existingRaid);
-		return ResponseEntity.ok("Raid con ID: " + id + " actualizada con éxito.");
+		return ResponseEntity.ok("" + raid);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteRaid(@PathVariable Long id) {
-		Raid existingRaid = raidService.findRaidById(id);
-		if (existingRaid == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Raid with ID: " + id + " not found.");
+		ResponseEntity<String> verificationResponse = verifyRaidExists(id);
+		if (verificationResponse != null) {
+			return verificationResponse;
 		}
 		raidService.deleteRaidById(id);
-		return ResponseEntity.ok("Raid with ID: " + id + " deleted");
+		return ResponseEntity.ok(String.format(FileManager.getText("raid.deleted"), id));
 	}
 
-	@GetMapping("/hello")
-	public String sayHello() {
-		return "Hello, welcome to the WoW Raids API!";
+	public ResponseEntity<String> verifyRaidExists(Long id) {
+		Raid existingRaid = raidService.getRaidById(id);
+		if (existingRaid == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(String.format(FileManager.getText("error.notFound"), id));
+		}
+		return null;
 	}
 
 }

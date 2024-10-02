@@ -1,5 +1,6 @@
 package com.wow_database.wow.model.enums.checker;
 
+import com.wow_database.wow.global.file.FileManager;
 import com.wow_database.wow.model.enums.Expansion;
 
 public class ExpansionChecker {
@@ -13,10 +14,11 @@ public class ExpansionChecker {
 		}
 		try {
 			Expansion expansion = Expansion.valueOf(input.toUpperCase().trim());
-			return expansion.name(); // Retornar el nombre de la expansión
+			return expansion.name();
 		} catch (IllegalArgumentException e) {
 
-			throw new IllegalArgumentException(input + " is a invalid expansion", e);
+			String errorMessage = String.format(FileManager.getText("invalid.expansion"), input);
+			throw new IllegalArgumentException(errorMessage, e);
 		}
 	}
 

@@ -6,19 +6,20 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.wow_database.wow.global.constant.Constants;
+import com.wow_database.wow.global.file.FileManager;
 import com.wow_database.wow.model.enums.ClassName;
 import com.wow_database.wow.model.enums.Difficulty;
 import com.wow_database.wow.model.enums.Expansion;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	private String error = "Error: ";
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<CustomErrorResponse> handleHttpMessageNotReadableException(
 			HttpMessageNotReadableException e) {
-		String errorMessage = error + e.getMessage();
-		String errorCode = "JSON_PARSE_ERROR";
+		String errorMessage = e.getMessage();
+		String errorCode = Constants.ERROR_CODE_JSON_PARSE_ERROR;
 
 		CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage,
 				errorCode, null);
@@ -27,25 +28,25 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<CustomErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-		String errorMessage = error + e.getMessage();
-		String errorCode = "INVALID_ARGUMENT";
+		String errorMessage = e.getMessage();
+		String errorCode = Constants.ERROR_CODE_INVALID_ARGUMENT;
 
 		StringBuilder options = new StringBuilder();
 
-		if (e.getMessage().contains("expansion")) {
+		if (e.getMessage().contains(FileManager.getText("expansion"))) {
 			for (Expansion exp : Expansion.values()) {
 				options.append(exp.name()).append(", ");
 			}
-		} else if (e.getMessage().contains("class")) {
+		} else if (e.getMessage().contains(FileManager.getText("class"))) {
 			for (ClassName cls : ClassName.values()) {
 				options.append(cls.name()).append(", ");
 			}
-		} else if (e.getMessage().contains("difficulty")) {
+		} else if (e.getMessage().contains(FileManager.getText("difficulty"))) {
 			for (Difficulty difficulty : Difficulty.values()) {
 				options.append(difficulty.name()).append(", ");
 			}
 		} else {
-			options.append("No hay opciones disponibles.");
+			options.append(FileManager.getText("options.not.available"));
 		}
 
 		if (options.length() > 0) {
@@ -59,8 +60,8 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<CustomErrorResponse> handleGeneralException(Exception e) {
-		String errorMessage = error + e.getMessage();
-		String errorCode = "GENERIC_ERROR";
+		String errorMessage = e.getMessage();
+		String errorCode = Constants.ERROR_CODE_GENERIC_ERROR;
 
 		CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				errorMessage, errorCode, null);

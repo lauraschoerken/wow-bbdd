@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wow_database.wow.global.file.FileManager;
 import com.wow_database.wow.model.entity.Raid;
 import com.wow_database.wow.model.enums.ClassName;
 import com.wow_database.wow.model.enums.Difficulty;
@@ -26,7 +27,7 @@ public class RaidService {
 		return raidRepository.findAll();
 	}
 
-	public Raid findRaidById(Long id) {
+	public Raid getRaidById(Long id) {
 		Optional<Raid> raidOptional = raidRepository.findById(id);
 		return raidOptional.orElse(null);
 	}
@@ -40,7 +41,7 @@ public class RaidService {
 			Difficulty.valueOf(difficultyStr.toUpperCase());
 			return raidRepository.findByDifficulty(difficultyStr);
 		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Dificultad no válida: " + difficultyStr);
+			throw new IllegalArgumentException(String.format(FileManager.getText("invalid.difficulty"), difficultyStr));
 		}
 	}
 
@@ -49,7 +50,7 @@ public class RaidService {
 			ClassName.valueOf(classStr.toUpperCase());
 			return raidRepository.findByClasses(classStr);
 		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Clase no válida: " + classStr);
+			throw new IllegalArgumentException(String.format(FileManager.getText("invalid.class"), classStr));
 		}
 	}
 
@@ -58,7 +59,7 @@ public class RaidService {
 			Expansion.valueOf(expansionStr.toUpperCase());
 			return raidRepository.findByExpansion(expansionStr);
 		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Expansion no válida: " + expansionStr);
+			throw new IllegalArgumentException(String.format(FileManager.getText("invalid.expansion"), expansionStr));
 		}
 	}
 
