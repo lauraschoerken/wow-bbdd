@@ -38,7 +38,11 @@ public class FileManager {
 	}
 
 	public static String getText(String key) {
-		return texts.getProperty(key);
+		String value = texts.getProperty(key);
+		if (value == null) {
+			System.out.println("No se encontró valor para la clave: " + key);
+		}
+		return value;
 	}
 
 	private FileManager() {
