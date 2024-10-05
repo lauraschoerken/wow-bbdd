@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.wow_database.wow.model.entity.Raid;
 
-public interface RaidRepository extends JpaRepository<Raid, Long> {
+public interface RaidRepository extends JpaRepository<Raid, String> {
 
 	@Query("SELECT r FROM Raid r WHERE r.difficulty LIKE %:difficulty%")
 	List<Raid> findByDifficulty(@Param("difficulty") String difficulty);

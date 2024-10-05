@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wow_database.wow.global.file.FileManager;
+import com.wow_database.wow.global.handler.exception.RaidNotFoundException;
 import com.wow_database.wow.model.entity.Raid;
 import com.wow_database.wow.model.enums.ClassName;
 import com.wow_database.wow.model.enums.Difficulty;
@@ -27,12 +28,12 @@ public class RaidService {
 		return raidRepository.findAll();
 	}
 
-	public Raid getRaidById(Long id) {
+	public Raid getRaidById(String id) {
 		Optional<Raid> raidOptional = raidRepository.findById(id);
-		return raidOptional.orElse(null);
+		return raidOptional.orElseThrow(() -> new RaidNotFoundException(id));
 	}
 
-	public void deleteRaidById(Long id) {
+	public void deleteRaidById(String id) {
 		raidRepository.deleteById(id);
 	}
 

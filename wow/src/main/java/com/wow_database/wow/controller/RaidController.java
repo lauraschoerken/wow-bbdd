@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wow_database.wow.global.file.FileManager;
+import com.wow_database.wow.model.dto.RaidDTO;
 import com.wow_database.wow.model.entity.Raid;
 import com.wow_database.wow.model.enums.checker.ClassNameChecker;
 import com.wow_database.wow.model.enums.checker.DifficultyChecker;
@@ -42,7 +43,7 @@ public class RaidController {
 	}
 
 	@GetMapping("{id}")
-	public Raid getRaidsById(@PathVariable Long id) {
+	public Raid getRaidsById(@PathVariable String id) {
 		return raidService.getRaidById(id);
 	}
 
@@ -62,17 +63,16 @@ public class RaidController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Raid> newRaid(@RequestBody Raid raid) {
-		raid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
-		raid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
-		raid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
-
+	public ResponseEntity<String> newRaid(@RequestBody RaidDTO raidCreateDTO) {
+		Raid raid = raidCreateDTO.toRaid();
 		raidService.saveRaid(raid);
-		return ResponseEntity.ok(raid);
+		System.out.println("String antes de guardar: " + raid.getId());
+
+		return ResponseEntity.status(HttpStatus.CREATED).body("" + raid);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<String> updateRaid(@PathVariable Long id, @RequestBody Raid raid) {
+	public ResponseEntity<String> updateRaid(@PathVariable String id, @RequestBody Raid raid) {
 		ResponseEntity<String> verificationResponse = verifyRaidExists(id);
 		if (verificationResponse != null) {
 			return verificationResponse;
@@ -86,16 +86,17 @@ public class RaidController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteRaid(@PathVariable Long id) {
+	public ResponseEntity<String> deleteRaid(@PathVariable String id) {
 		ResponseEntity<String> verificationResponse = verifyRaidExists(id);
 		if (verificationResponse != null) {
 			return verificationResponse;
 		}
 		raidService.deleteRaidById(id);
-		return ResponseEntity.ok(String.format(FileManager.getText("raid.deleted"), id));
+		String deleteMessage = String.format(FileManager.getText("raid.deleted"), id);
+		return ResponseEntity.ok(deleteMessage);
 	}
 
-	public ResponseEntity<String> verifyRaidExists(Long id) {
+	public ResponseEntity<String> verifyRaidExists(String id) {
 		Raid existingRaid = raidService.getRaidById(id);
 		if (existingRaid == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
