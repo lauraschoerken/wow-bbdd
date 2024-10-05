@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.wow_database.wow.global.constant.Constants;
 import com.wow_database.wow.global.file.FileManager;
+import com.wow_database.wow.global.handler.exception.RaidNotFoundException;
 import com.wow_database.wow.model.enums.ClassName;
 import com.wow_database.wow.model.enums.Difficulty;
 import com.wow_database.wow.model.enums.Expansion;
@@ -66,5 +67,15 @@ public class GlobalExceptionHandler {
 		CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				errorMessage, errorCode, null);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+	}
+
+	@ExceptionHandler(RaidNotFoundException.class)
+	public ResponseEntity<CustomErrorResponse> handleRaidNotFoundException(RaidNotFoundException e) {
+		String errorMessage = e.getMessage();
+		String errorCode = Constants.ERROR_CODE_RAID_NOT_FOUND;
+
+		CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.NOT_FOUND.value(), errorMessage,
+				errorCode, null);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 	}
 }

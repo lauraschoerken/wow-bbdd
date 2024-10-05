@@ -100,7 +100,7 @@ public class RaidController {
 		Raid existingRaid = raidService.getRaidById(id);
 		if (existingRaid == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(String.format(FileManager.getText("error.notFound"), id));
+					.body(String.format(FileManager.getText("error.raid.notFound"), id));
 		}
 		return null;
 	}

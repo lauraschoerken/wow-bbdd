@@ -9,5 +9,6 @@ public final class Constants {
 	public static final String ERROR_CODE_JSON_PARSE_ERROR = "JSON_PARSE_ERROR";
 	public static final String ERROR_CODE_INVALID_ARGUMENT = "INVALID_ARGUMENT";
 	public static final String ERROR_CODE_GENERIC_ERROR = "GENERIC_ERROR";
+	public static final String ERROR_CODE_RAID_NOT_FOUND = "RAID_NOT_FOUND";
 
 }
