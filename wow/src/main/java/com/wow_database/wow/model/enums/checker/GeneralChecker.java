@@ -17,16 +17,16 @@ public class GeneralChecker {
 				E enumValue = Enum.valueOf(enumClass, valueName.toUpperCase().trim());
 				foundValues.append(enumValue.name()).append(",");
 			} catch (IllegalArgumentException e) {
-				String errorMessage = String
-						.format(FileManager.getText("invalid." + enumClass.getSimpleName().toLowerCase()), valueName);
+				String textFileKey = "invalid." + enumClass.getSimpleName().toLowerCase();
+				String errorMessage = String.format(FileManager.getText(textFileKey), valueName);
 				throw new IllegalArgumentException(errorMessage, e);
+
 			}
 		}
 
 		if (foundValues.length() > 0) {
 			foundValues.setLength(foundValues.length() - 1);
 		}
-
 		return foundValues.toString();
 	}
 
