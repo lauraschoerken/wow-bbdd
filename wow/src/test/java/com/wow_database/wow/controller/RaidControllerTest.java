@@ -1,6 +1,7 @@
 package com.wow_database.wow.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.wow_database.wow.global.file.FileManager;
+import com.wow_database.wow.model.dto.RaidDTO;
 import com.wow_database.wow.model.entity.Raid;
 import com.wow_database.wow.service.RaidService;
 
@@ -73,15 +75,20 @@ public class RaidControllerTest {
 		verify(raidService, times(1)).deleteRaidById(testRaid.getId());
 	}
 
-//	@Test
-	// TODO
-//	void testNewRaid() {
-//		when(raidService.saveRaid(testRaid)).thenReturn(testRaid);
-//		ResponseEntity<Raid> response = raidController.newRaid();
-//		assertEquals(HttpStatus.OK, response.getStatusCode());
-//		assertEquals("Test Raid", response.getBody().getName());
-//		verify(raidService, times(1)).saveRaid(testRaid);
-//	}
+	@Test
+	void testNewRaid() {
+		RaidDTO testRaidDTO = new RaidDTO();
+		testRaidDTO.setName(testRaid.getName());
+		testRaidDTO.setExpansion(testRaid.getExpansion());
+		testRaidDTO.setClasses(testRaid.getClasses());
+		testRaidDTO.setDifficulty(testRaid.getDifficulty());
+		when(raidService.saveRaid(any(Raid.class))).thenReturn(testRaid);
+		ResponseEntity<Raid> response = raidController.newRaid(testRaidDTO);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertEquals("Test Raid", response.getBody().getName());
+
+		verify(raidService, times(1)).saveRaid(any(Raid.class));
+	}
 
 	@Test
 	void testUpdateRaid() {

@@ -63,12 +63,11 @@ public class RaidController {
 	}
 
 	@PostMapping
-	public ResponseEntity<String> newRaid(@RequestBody RaidDTO raidCreateDTO) {
+	public ResponseEntity<Raid> newRaid(@RequestBody RaidDTO raidCreateDTO) {
 		Raid raid = raidCreateDTO.toRaid();
 		raidService.saveRaid(raid);
-		System.out.println("String antes de guardar: " + raid.getId());
 
-		return ResponseEntity.status(HttpStatus.CREATED).body("" + raid);
+		return ResponseEntity.status(HttpStatus.CREATED).body(raid);
 	}
 
 	@PutMapping("{id}")

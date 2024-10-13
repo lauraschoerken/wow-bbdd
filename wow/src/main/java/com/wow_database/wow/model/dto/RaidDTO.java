@@ -7,9 +7,11 @@ import com.wow_database.wow.model.enums.checker.ExpansionChecker;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RaidDTO {
 	private String name;
 	private String expansion;
