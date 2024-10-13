@@ -2,6 +2,9 @@ package com.wow_database.wow.model.entity;
 
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,6 +18,8 @@ import lombok.Setter;
 @Data
 @AllArgsConstructor
 public class Raid {
+
+	private static final Logger logger = LoggerFactory.getLogger(Raid.class);
 
 	@Id
 	@Column(columnDefinition = "VARCHAR(36)", updatable = false, nullable = false)
@@ -37,7 +42,7 @@ public class Raid {
 	}
 
 	public Raid() {
-		this.id = UUID.randomUUID().toString(); // Genera un UUID por defecto en el constructor sin parámetros
+		this.id = UUID.randomUUID().toString();
 	}
 
 	public Raid(String name, String expansion, String mounts, String classes, String transmogs, String achievements,
@@ -50,7 +55,7 @@ public class Raid {
 		this.transmogs = transmogs;
 		this.achievements = achievements;
 		this.difficulty = difficulty;
-		System.out.println("UUID antes de guardar: " + this.id);
+		logger.info("UUID antes de guardar: {}", this.id);
 
 	}
 }
