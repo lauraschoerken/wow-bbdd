@@ -36,6 +36,10 @@ public class RaidService {
 		return raidRepository.findAll();
 	}
 
+	public List<Raid> getAllRaidsByUser(Long userId) {
+		return raidRepository.findByUserId(userId);
+	}
+
 	public Raid getRaidById(String id) {
 		Optional<Raid> raidOptional = raidRepository.findById(id);
 		return raidOptional.orElseThrow(() -> new RaidNotFoundException(id));

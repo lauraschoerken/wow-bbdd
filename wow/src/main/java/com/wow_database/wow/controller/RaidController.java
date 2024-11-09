@@ -43,6 +43,11 @@ public class RaidController {
 		return raidService.getAllRaids();
 	}
 
+	@GetMapping("/user/{userId}")
+	public List<Raid> getAllRaidsUser(@PathVariable Long userId) {
+		return raidService.getAllRaidsByUser(userId);
+	}
+
 	@GetMapping("{id}")
 	public Raid getRaidsById(@PathVariable String id) {
 		return raidService.getRaidById(id);

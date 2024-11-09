@@ -19,4 +19,6 @@ public interface RaidRepository extends JpaRepository<Raid, String> {
 	@Query("SELECT r FROM Raid r WHERE r.expansion = :expansion")
 	List<Raid> findByExpansion(@Param("expansion") String expansion);
 
+	List<Raid> findByUserId(Long userId);
+
 }
