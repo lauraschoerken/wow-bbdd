@@ -1,5 +1,6 @@
 package com.wow_database.wow.model.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -33,6 +34,9 @@ public class Raid {
 	private String transmogs;
 	private String achievements;
 	private String difficulty;
+	private User user;
+	private LocalDateTime created;
+	private LocalDateTime lastUpdate;
 
 	@PrePersist
 	public void generarUUID() {
@@ -46,7 +50,7 @@ public class Raid {
 	}
 
 	public Raid(String name, String expansion, String mounts, String classes, String transmogs, String achievements,
-			String difficulty) {
+			String difficulty, User user) {
 		this.id = UUID.randomUUID().toString();
 		this.name = name;
 		this.expansion = expansion;
@@ -55,6 +59,9 @@ public class Raid {
 		this.transmogs = transmogs;
 		this.achievements = achievements;
 		this.difficulty = difficulty;
+		this.created = LocalDateTime.now();
+		this.lastUpdate = LocalDateTime.now();
+		this.user = user;
 		logger.info("UUID antes de guardar: {}", this.id);
 
 	}

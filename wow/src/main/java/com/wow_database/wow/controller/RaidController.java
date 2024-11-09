@@ -1,5 +1,6 @@
 package com.wow_database.wow.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,7 @@ public class RaidController {
 		existingRaid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
 		existingRaid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
 		existingRaid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
+		existingRaid.setLastUpdate(LocalDateTime.now());
 		raidService.saveRaid(existingRaid);
 		return ResponseEntity.ok("" + raid);
 	}
