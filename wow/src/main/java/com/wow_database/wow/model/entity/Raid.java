@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,6 +36,8 @@ public class Raid {
 	private String transmogs;
 	private String achievements;
 	private String difficulty;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
 	private User user;
 	private LocalDateTime created;
 	private LocalDateTime lastUpdate;

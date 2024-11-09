@@ -64,11 +64,9 @@ public class RaidController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Raid> newRaid(@RequestBody RaidDTO raidCreateDTO) {
-		Raid raid = raidCreateDTO.toRaid();
-		raidService.saveRaid(raid);
+	public ResponseEntity<Raid> newRaid(@RequestBody RaidDTO raidDTO) {
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(raid);
+		return ResponseEntity.status(HttpStatus.CREATED).body(raidService.createRaidFromDTO(raidDTO));
 	}
 
 	@PutMapping("{id}")
