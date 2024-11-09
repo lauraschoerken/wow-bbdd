@@ -15,12 +15,8 @@ import lombok.NoArgsConstructor;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String id;
-
+	private Long id; // Change this to Long, String, or UUID as per your database requirements
+	private String username;
 	private String name;
 	private String email;
-
-	public class id {
-
-	}
 }
