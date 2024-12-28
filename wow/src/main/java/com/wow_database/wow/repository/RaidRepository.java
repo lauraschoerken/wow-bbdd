@@ -21,6 +21,9 @@ public interface RaidRepository extends JpaRepository<Raid, String> {
 	@Query("SELECT r.id, r.name, r.expansion FROM Raid r WHERE r.user.id = :userId")
 	List<Tuple> findPartialByUserId(@Param("userId") Long userId);
 
+	@Query("SELECT r.id, r.name, r.expansion, r.mounts, r.transmogs, r.achievements, r.difficulty, r.created, r.lastUpdate FROM Raid r WHERE r.user.id = :userId")
+	List<Tuple> findFullByUserId(@Param("userId") Long userId);
+
 	List<Raid> findByUserId(Long userId);
 
 }
