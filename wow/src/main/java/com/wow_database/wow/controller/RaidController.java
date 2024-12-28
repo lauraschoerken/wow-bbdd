@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wow_database.wow.global.file.FileManager;
-import com.wow_database.wow.model.dto.RaidDTO;
+import com.wow_database.wow.model.dto.RaidCreateDTO;
+import com.wow_database.wow.model.dto.RaidPartialDTO;
 import com.wow_database.wow.model.entity.Raid;
-import com.wow_database.wow.model.enums.checker.ClassNameChecker;
 import com.wow_database.wow.model.enums.checker.DifficultyChecker;
 import com.wow_database.wow.model.enums.checker.ExpansionChecker;
 import com.wow_database.wow.service.RaidService;
@@ -44,18 +44,22 @@ public class RaidController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public List<Raid> getAllRaidsUser(@PathVariable Long userId) {
-		return raidService.getAllRaidsByUser(userId);
+	public ResponseEntity<?> getRaidsByUser(@PathVariable Long userId, @RequestParam(required = false) String full) {
+		
+		boolean isFull = full != null && !full.equalsIgnoreCase("false");
+
+		if (isFull) {
+			List<Raid> raids = raidService.getAllRaidsByUserFull(userId);
+			return ResponseEntity.ok(raids);
+		} else {
+			List<RaidPartialDTO> raids = raidService.getAllRaidsByUserPartial(userId);
+			return ResponseEntity.ok(raids);
+		}
 	}
 
 	@GetMapping("{id}")
 	public Raid getRaidsById(@PathVariable String id) {
 		return raidService.getRaidById(id);
-	}
-
-	@GetMapping("/class/{className}")
-	public List<Raid> getRaidsByClass(@PathVariable String className) {
-		return raidService.getRaidsByClass(className);
 	}
 
 	@GetMapping("/difficulty/{difficulty}")
@@ -69,7 +73,7 @@ public class RaidController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Raid> newRaid(@RequestBody RaidDTO raidDTO) {
+	public ResponseEntity<Raid> newRaid(@RequestBody RaidCreateDTO raidDTO) {
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(raidService.createRaidFromDTO(raidDTO));
 	}
@@ -82,7 +86,6 @@ public class RaidController {
 		}
 		Raid existingRaid = raidService.getRaidById(id);
 		existingRaid.setDifficulty(DifficultyChecker.checkDifficulty(raid.getDifficulty()));
-		existingRaid.setClasses(ClassNameChecker.checkClassName(raid.getClasses()));
 		existingRaid.setExpansion(ExpansionChecker.checkExpansion(raid.getExpansion()));
 		existingRaid.setLastUpdate(LocalDateTime.now());
 		raidService.saveRaid(existingRaid);

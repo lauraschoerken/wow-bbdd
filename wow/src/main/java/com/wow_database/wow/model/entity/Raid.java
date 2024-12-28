@@ -32,7 +32,6 @@ public class Raid {
 	private String name;
 	private String expansion;
 	private String mounts;
-	private String classes;
 	private String transmogs;
 	private String achievements;
 	private String difficulty;
@@ -41,6 +40,7 @@ public class Raid {
 	private User user;
 	private LocalDateTime created;
 	private LocalDateTime lastUpdate;
+	// TO DO character list
 
 	@PrePersist
 	public void generarUUID() {
@@ -53,13 +53,12 @@ public class Raid {
 		this.id = UUID.randomUUID().toString();
 	}
 
-	public Raid(String name, String expansion, String mounts, String classes, String transmogs, String achievements,
-			String difficulty, User user) {
+	public Raid(String name, String expansion, String mounts, String transmogs, String achievements, String difficulty,
+			User user) {
 		this.id = UUID.randomUUID().toString();
 		this.name = name;
 		this.expansion = expansion;
 		this.mounts = mounts;
-		this.classes = classes;
 		this.transmogs = transmogs;
 		this.achievements = achievements;
 		this.difficulty = difficulty;

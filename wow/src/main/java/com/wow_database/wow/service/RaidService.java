@@ -1,5 +1,6 @@
 package com.wow_database.wow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,17 +9,18 @@ import org.springframework.stereotype.Service;
 
 import com.wow_database.wow.global.file.FileManager;
 import com.wow_database.wow.global.handler.exception.RaidNotFoundException;
-import com.wow_database.wow.model.dto.RaidDTO;
+import com.wow_database.wow.model.dto.RaidCreateDTO;
+import com.wow_database.wow.model.dto.RaidPartialDTO;
 import com.wow_database.wow.model.entity.Raid;
 import com.wow_database.wow.model.entity.User;
-import com.wow_database.wow.model.enums.ClassName;
 import com.wow_database.wow.model.enums.Difficulty;
 import com.wow_database.wow.model.enums.Expansion;
-import com.wow_database.wow.model.enums.checker.ClassNameChecker;
 import com.wow_database.wow.model.enums.checker.DifficultyChecker;
 import com.wow_database.wow.model.enums.checker.ExpansionChecker;
 import com.wow_database.wow.repository.RaidRepository;
 import com.wow_database.wow.repository.UserRepository;
+
+import jakarta.persistence.Tuple;
 
 @Service
 public class RaidService {
@@ -58,15 +60,6 @@ public class RaidService {
 		}
 	}
 
-	public List<Raid> getRaidsByClass(String classStr) {
-		try {
-			ClassName.valueOf(classStr.toUpperCase());
-			return raidRepository.findByClasses(classStr);
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException(String.format(FileManager.getText("invalid.class"), classStr));
-		}
-	}
-
 	public List<Raid> getRaidsByExpansion(String expansionStr) {
 		try {
 			Expansion.valueOf(expansionStr.toUpperCase());
@@ -76,15 +69,36 @@ public class RaidService {
 		}
 	}
 
-	public Raid createRaidFromDTO(RaidDTO raidDTO) {
+	public Raid createRaidFromDTO(RaidCreateDTO raidDTO) {
 		User user = userRepository.findById(raidDTO.getUserId()).orElseThrow(
 				() -> new IllegalArgumentException("Usuario no encontrado con ID: " + raidDTO.getUserId()));
 
 		Raid raid = new Raid(raidDTO.getName(), ExpansionChecker.checkExpansion(raidDTO.getExpansion()),
-				raidDTO.getMounts(), ClassNameChecker.checkClassName(raidDTO.getClasses()), raidDTO.getTransmogs(),
-				raidDTO.getAchievements(), DifficultyChecker.checkDifficulty(raidDTO.getDifficulty()), user);
+				raidDTO.getMounts(), raidDTO.getTransmogs(), raidDTO.getAchievements(),
+				DifficultyChecker.checkDifficulty(raidDTO.getDifficulty()), user);
 
 		return raidRepository.save(raid);
+	}
+
+	public List<Raid> getAllRaidsByUserFull(Long userId) {
+		return raidRepository.findByUserId(userId);
+
+		// return raidRepository.findByUserIdFull(userId);
+	}
+
+	public List<RaidPartialDTO> getAllRaidsByUserPartial(Long userId) {
+		List<Tuple> tuples = raidRepository.findPartialByUserId(userId);
+		List<RaidPartialDTO> raids = new ArrayList<>();
+
+		for (Tuple tuple : tuples) {
+			String id = tuple.get(0, String.class); // Accede a los valores del Tuple
+			String name = tuple.get(1, String.class);
+			String expansion = tuple.get(2, String.class);
+
+			raids.add(new RaidPartialDTO(id, name, expansion));
+		}
+
+		return raids;
 	}
 
 }
